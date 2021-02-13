@@ -3,6 +3,8 @@ package sample;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -24,6 +26,12 @@ public class JadTrainerWindow extends Application {
 
         Controller controller = new Controller();
         primaryStage.setTitle("JadTrainer");
+
+        ScrollPane logArea = new ScrollPane();
+        TextArea logText = new TextArea("Welcome to Jad Trainer\n");
+        logText.setPrefWidth(350);
+        logArea.setContent(logText);
+
         Media jadMagic = new Media(new File("resource/JadMagic.mp4").toURI().toString());
         Media jadRange = new Media(new File("resource/JadRange.mp4").toURI().toString());
 
@@ -43,7 +51,7 @@ public class JadTrainerWindow extends Application {
         animationArea.setFitWidth(204);
 
         magicPlayer.setOnEndOfMedia(() -> {
-            controller.successCheck("magic");
+            logText.setText(logText.getText() + controller.successCheck());
             magicPlayer.stop();
             if(controller.nextAttack().equals("range")){
                 animationArea.setMediaPlayer(rangePlayer);
@@ -52,10 +60,11 @@ public class JadTrainerWindow extends Application {
                 animationArea.setMediaPlayer(magicPlayer);
                 magicPlayer.play();
             }
+            logArea.setVvalue(1.0);
         });
 
         rangePlayer.setOnEndOfMedia(() -> {
-            controller.successCheck("range");
+            logText.setText(logText.getText() + controller.successCheck());
             rangePlayer.stop();
             if(controller.nextAttack().equals("range")){
                 animationArea.setMediaPlayer(rangePlayer);
@@ -64,6 +73,8 @@ public class JadTrainerWindow extends Application {
                 animationArea.setMediaPlayer(magicPlayer);
                 magicPlayer.play();
             }
+
+            logArea.setVvalue(1.0);
         });
 
         //Create boxes to hold various components in a layout.
@@ -90,10 +101,11 @@ public class JadTrainerWindow extends Application {
         protMagicButton.setOnAction(actionEvent -> {controller.activateProtMagic();});
         protRangeButton.setOnAction(actionEvent -> {controller.activateProtMissiles();});
 
+
         //Add buttons to appropriate boxes
         buttonHolder.getChildren().addAll(protMagicButton, protRangeButton, startStop);
         animationAndButtonHolder.getChildren().addAll(animationArea, buttonHolder);
-        buttonAnimationAndLogHolder.getChildren().addAll(animationAndButtonHolder);
+        buttonAnimationAndLogHolder.getChildren().addAll(animationAndButtonHolder, logArea);
 
         //Initialize scene and bring up the window
         Scene scene = new Scene(buttonAnimationAndLogHolder);

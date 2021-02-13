@@ -54,18 +54,19 @@ public class Controller {
         activePrayer = "range";
     }
 
-    String successCheck(String targetPrayer){
+    String successCheck(){
         System.out.print("Target Prayer: " + targetPrayer);
         if(activePrayer.equals(targetPrayer)) {
             successCount++;
-            System.out.println(" Prayer chosen successfully. Total successes: " + successCount);
-            return "Prayer set correctly. Good Job!";
+            System.out.println(" Prayer chosen successfully. Total successes: " + successCount + "\n");
+            return "Prayer set correctly. Good Job!\n Total successes: " + successCount + "\n";
         }else{
             failCount++;
             System.out.println(" Failure: " + failCount);
             successCount = 0;
             int i = ThreadLocalRandom.current().nextInt(93);
-            return "Jad has hit you. You take: " + i + " damage. \nFor a total of: " + totalDamage + " damage.";
+            totalDamage += i;
+            return "Jad has hit you. You take: " + i + " damage. \nFor a total of: " + totalDamage + " damage.\n";
 
         }
     }
